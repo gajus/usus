@@ -43,6 +43,11 @@ export const baseConfiguration = {
     description: 'Overriding height value in pixels (minimum 0, maximum 10000000).',
     type: 'number'
   },
+  extractStyles: {
+    default: false,
+    description: 'Extracts CSS used to render the page.',
+    type: 'boolean'
+  },
   inlineStyles: {
     default: false,
     description: 'Inlines the styles required to render the document.',
