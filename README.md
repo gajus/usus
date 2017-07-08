@@ -19,7 +19,7 @@ Renders page using [Chrome Debugging Protocol](https://chromedevtools.github.io/
 
 ## Motivation
 
-I have a universal, single page application (SPA). The initial HTML is sent via the server-side, e.g. https://go2cinema.com/movies/spider-man-homecoming-2017-1000584. I want to inline the CSS used to render the page and delay loading of the rest of the CSS until after the page has loaded.
+I have a universal, single page application (SPA). The initial HTML is sent served by the server. I want to inline the CSS used to render the page and delay loading the rest of the CSS until after the page has loaded.
 
 Removing the blocking CSS and inlining the CSS required to render the page increases the perceived page loading speed. Presumably, improves SEO by reducing the page loading time.
 
@@ -41,7 +41,7 @@ const css = await render('http://gajus.com/', configuration);
 
 ### Configuration
 
-By default, `render` returns the CSS used to render the document. Using the `inlineStyles` option makes render return HTML document with CSS inlined.
+`render` returns the CSS used to render the document. Using the `inlineStyles` option makes render return HTML document with CSS inlined.
 
 |Name|Type|Description|Default value|
 |---|---|---|---|
@@ -73,12 +73,14 @@ $ usus --help
 $ usus render --url http://gajus.com/
 $ usus render --url http://gajus.com/ --inlineStyles
 $ usus render --url http://gajus.com/ --cookies foo=bar,baz=qux
+# Render emulating the iPhone 6
+$ uses render --url http://gajus.com/ --deviceMetricsOverride.deviceScaleFactor 2 --deviceMetricsOverride.fitWindow false --deviceMetricsOverride.height 1334 --deviceMetricsOverride.mobile true --deviceMetricsOverride.width 750
 
 ```
 
 ### Building Docker container with Chrome
 
-Assuming that you are extending from the base [`node` image](https://github.com/nodejs/docker-node), all you need to do is add the following line to your `Dockerfile`:
+Add the following line to your `Dockerfile`:
 
 ```bash
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
@@ -88,23 +90,25 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
 
 ```
 
+This assumes that you are extending from the base [`node` image](https://github.com/nodejs/docker-node).
+
 ### Debugging
 
 Export `DEBUG=usus` variable to get additional debugging information, e.g.
 
 ```bash
-$ export DEBUG=usus
+$ export DEBUG=usus*
 $ usus --url http://gajus.com
 
 ```
 
 ## Implementation
 
-ūsus uses [Chrome Debugging Protocol](https://chromedevtools.github.io/devtools-protocol/) [CSS coverage report](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-takeCoverageDelta) to generate generate the styles used to render the document.
+ūsus uses [Chrome Debugging Protocol](https://chromedevtools.github.io/devtools-protocol/) [CSS coverage report](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-takeCoverageDelta) to generate a stylesheet used to render the document.
 
 ## Alternatives
 
-The following alternative packages provide equivalent service:
+The following programs provide equivalent service:
 
 * https://github.com/giakki/uncss
 * https://github.com/pocketjoso/penthouse
@@ -113,4 +117,4 @@ The following alternative packages provide equivalent service:
 
 All of these programs are using PhantomJS or JSDom to render the page/ evaluate the scripts.
 
-ūsus is different because it is using [Chrome Debugging Protocol](https://chromedevtools.github.io/devtools-protocol/).
+ūsus is different because it is using [Chrome Debugging Protocol](https://chromedevtools.github.io/devtools-protocol/) and it leverages the Chrome [CSS coverage report](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-takeCoverageDelta) to generate a stylesheet used to render the document.
