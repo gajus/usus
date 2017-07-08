@@ -73,7 +73,7 @@ const inlineImports = async (DOM: *, Runtime: *, rootNodeId: number, styleImport
 
   const script = `
     <script>
-    document.addEventListener('load', function () {
+    window.addEventListener('load', function () {
       var styleContainer = document.createElement('div');
 
       styleContainer.innerHTML = '${innerHTML}';
