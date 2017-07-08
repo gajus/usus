@@ -71,5 +71,5 @@
     "precommit": "npm run lint && npm run test && npm run build",
     "test": "NODE_ENV=development nyc --reporter=text ava --verbose --serial"
   },
-  "version": "1.0.0"
+  "version": "1.0.1"
 }
