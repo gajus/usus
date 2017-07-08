@@ -54,8 +54,6 @@ const inlineStyles = async (DOM: *, Runtime: *, rootNodeId: number, styles: stri
 const inlineImports = async (DOM: *, Runtime: *, rootNodeId: number, styleImports: $ReadOnlyArray<string>) => {
   // @todo See note in inlineStyles.
 
-  const innerHTML = styleImports.join('').replace(/'/g, '\\\'');
-
   await Runtime.evaluate({
     expression: `
       const scriptElement = document.createElement('div');
@@ -71,21 +69,9 @@ const inlineImports = async (DOM: *, Runtime: *, rootNodeId: number, styleImport
 
   debug('#usus-style-import nodeId %d', nodeId);
 
-  const script = `
-    <script>
-    window.addEventListener('load', function () {
-      var styleContainer = document.createElement('div');
-
-      styleContainer.innerHTML = '${innerHTML}';
-
-      document.body.appendChild(styleContainer);
-    });
-    </script>
-  `;
-
   await DOM.setOuterHTML({
     nodeId,
-    outerHTML: script
+    outerHTML: styleImports
   });
 };
 
