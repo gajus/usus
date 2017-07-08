@@ -7,6 +7,7 @@ import createConfiguration, {
 
 const createDefaultConfiguration = () => {
   return {
+    cookies: [],
     delay: 5000,
     deviceMetricsOverride: {
       ...deviceMetricsOverrideDesktopProfile

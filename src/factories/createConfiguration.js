@@ -18,6 +18,7 @@ export const deviceMetricsOverrideDesktopProfile = {
 export default (userConfiguration: UserConfigurationType): ConfigurationType => {
   const delayConfiguration = userConfiguration.delay || 5000;
   const inlineStyles = userConfiguration.inlineStyles || false;
+  const cookies = userConfiguration.cookies || [];
 
   let deviceMetricsOverride = deviceMetricsOverrideDesktopProfile;
 
@@ -29,6 +30,7 @@ export default (userConfiguration: UserConfigurationType): ConfigurationType => 
   }
 
   return {
+    cookies,
     delay: delayConfiguration,
     deviceMetricsOverride,
     inlineStyles

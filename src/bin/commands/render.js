@@ -10,6 +10,10 @@ export const command = 'render';
 export const desc = 'Renders page using Chrome Debugging Protocol. Extracts CSS used to render the page. Renders HTML with the blocking CSS made asynchronous. Inlines the critical CSS.';
 
 export const baseConfiguration = {
+  cookies: {
+    description: 'Sets a cookie with the given cookie data. Must be provided as key=value pairs, e.g. foo=bar.',
+    type: 'array'
+  },
   delay: {
     default: 5000,
     description: 'Defines how many milliseconds to wait after the "load" event has been fired before capturing the styles used to load the page. This is important if resources appearing on the page are being loaded asynchronously.'
@@ -60,7 +64,28 @@ export const builder = (yargs: Object): void => {
 
 // eslint-disable-next-line flowtype/no-weak-types
 export const handler = async (argv: Object) => {
-  const css = await render(argv.url, argv);
+  const cookies = [];
+
+  if (argv.cookies) {
+    for (const tuple of argv.cookies) {
+      const [
+        key,
+        value
+      ] = tuple.split('=', 2);
+
+      const cookie = {
+        name: key,
+        value
+      };
+
+      cookies.push(cookie);
+    }
+  }
+
+  const css = await render(argv.url, {
+    argv,
+    cookies
+  });
 
   // eslint-disable-next-line no-console
   console.log(css);

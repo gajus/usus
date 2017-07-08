@@ -79,7 +79,8 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
     DOM,
     Emulation,
     Page,
-    Runtime
+    Runtime,
+    Network
   } = protocol;
 
   await DOM.enable();
@@ -88,6 +89,14 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
   await Runtime.enable();
 
   Emulation.setDeviceMetricsOverride(configuration.deviceMetricsOverride);
+
+  for (const cookie of configuration.cookies) {
+    Network.setCookie({
+      name: cookie.name,
+      url,
+      value: cookie.value
+    });
+  }
 
   CSS.startRuleUsageTracking();
 

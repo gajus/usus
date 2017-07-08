@@ -51,6 +51,7 @@ By default, `render` returns the CSS used to render the document. Using the `inl
 |`deviceMetricsOverride.height`|`number`|Overriding width value in pixels (minimum 0, maximum 10000000).|`1080`|
 |`deviceMetricsOverride.width`|`number`|Overriding height value in pixels (minimum 0, maximum 10000000).|`1920`|
 |`deviceMetricsOverride.mobile`|`boolean`|Whether to emulate mobile device. This includes viewport meta tag, overlay scrollbars, text autosizing and more.|`false`|
+|`cookies`|`Array<{name: string, value: string}>`|Sets a cookie with the given cookie data.|N/A|
 |`inlineStyles`|`boolean`|Inlines the styles required to render the document.|`false`|
 |`url`|`string`|The URL to render.|N/A|
 
@@ -65,6 +66,7 @@ $ npm install usus --global
 $ usus --help
 $ usus render --url http://gajus.com/
 $ usus render --url http://gajus.com/ --inlineStyles
+$ usus render --url http://gajus.com/ --cookies foo=bar,baz=qux
 
 ```
 

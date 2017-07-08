@@ -4,6 +4,11 @@
 // is because $Shape<> does not work with covariant types.
 // @see http://imgur.com/a/qdolZ
 
+type CookieType = {|
+  +name: string,
+  +value: string
+|};
+
 export type UserDeviceMetricsOverrideType = {
   +deviceScaleFactor?: number,
   +fitWindow?: boolean,
@@ -21,12 +26,14 @@ export type DeviceMetricsOverrideType = {
 };
 
 export type UserConfigurationType = {
+  +cookies?: $ReadOnlyArray<CookieType>,
   +delay?: number,
   +deviceMetricsOverride?: UserDeviceMetricsOverrideType,
   +inlineStyles?: boolean
 };
 
 export type ConfigurationType = {|
+  +cookies: $ReadOnlyArray<CookieType>,
   +delay: number,
   +deviceMetricsOverride: DeviceMetricsOverrideType,
   +inlineStyles: boolean
