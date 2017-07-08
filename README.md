@@ -6,7 +6,7 @@
 [![Canonical Code Style](https://img.shields.io/badge/code%20style-canonical-blue.svg?style=flat-square)](https://github.com/gajus/canonical)
 [![Twitter Follow](https://img.shields.io/twitter/follow/kuizinas.svg?style=social&label=Follow)](https://twitter.com/kuizinas)
 
-Renders page using [Chrome Debugging Protocol](https://chromedevtools.github.io/devtools-protocol/) (CDP). Extracts CSS used to render the page. Renders HTML with the blocking CSS made asynchronous. Inlines the critical CSS.
+Renders webpage using the [Chrome Debugging Protocol](https://chromedevtools.github.io/devtools-protocol/) (CDP). Extracts CSS used to render the page. Renders HTML with the blocking CSS made asynchronous. Inlines the critical CSS.
 
 > Article about ūsus ⚡️🤘: [Pre-rendering SPA for SEO and improved perceived page loading speed](https://medium.com/@gajus/pre-rendering-spa-for-seo-and-improved-perceived-page-loading-speed-47075aa16d24)
 
@@ -94,7 +94,7 @@ $ usus render --url http://gajus.com/ --extractStyles true
 $ usus render --url http://gajus.com/ --inlineStyles true
 $ usus render --url http://gajus.com/ --cookies foo=bar,baz=qux
 # Render emulating the iPhone 6
-$ uses render --url http://gajus.com/ --deviceMetricsOverride.deviceScaleFactor 2 --deviceMetricsOverride.fitWindow false --deviceMetricsOverride.height 1334 --deviceMetricsOverride.mobile true --deviceMetricsOverride.width 750
+$ usus render --url http://gajus.com/ --deviceMetricsOverride.deviceScaleFactor 2 --deviceMetricsOverride.fitWindow false --deviceMetricsOverride.height 1334 --deviceMetricsOverride.mobile true --deviceMetricsOverride.width 750
 
 ```
 
@@ -107,7 +107,6 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
   && sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
   && apt-get update -y \
   && apt-get install google-chrome-stable -y
-
 ```
 
 This assumes that you are extending from the base [`node` image](https://github.com/nodejs/docker-node).
