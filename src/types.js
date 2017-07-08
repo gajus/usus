@@ -29,6 +29,7 @@ export type UserConfigurationType = {
   +cookies?: $ReadOnlyArray<CookieType>,
   +delay?: number,
   +deviceMetricsOverride?: UserDeviceMetricsOverrideType,
+  +extractStyles?: boolean,
   +inlineStyles?: boolean
 };
 
@@ -36,5 +37,6 @@ export type ConfigurationType = {|
   +cookies: $ReadOnlyArray<CookieType>,
   +delay: number,
   +deviceMetricsOverride: DeviceMetricsOverrideType,
+  +extractStyles: boolean,
   +inlineStyles: boolean
 |};

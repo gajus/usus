@@ -16,9 +16,14 @@ export const deviceMetricsOverrideDesktopProfile = {
 };
 
 export default (userConfiguration: UserConfigurationType): ConfigurationType => {
-  const delayConfiguration = userConfiguration.delay || 5000;
-  const inlineStyles = userConfiguration.inlineStyles || false;
   const cookies = userConfiguration.cookies || [];
+  const delayConfiguration = userConfiguration.delay || 5000;
+  const extractStyles = userConfiguration.extractStyles || false;
+  const inlineStyles = userConfiguration.inlineStyles || false;
+
+  if (extractStyles && inlineStyles) {
+    throw new Error('inlineStyles and inlineStyles options cannot be used together.');
+  }
 
   let deviceMetricsOverride = deviceMetricsOverrideDesktopProfile;
 
@@ -33,6 +38,7 @@ export default (userConfiguration: UserConfigurationType): ConfigurationType => 
     cookies,
     delay: delayConfiguration,
     deviceMetricsOverride,
+    extractStyles,
     inlineStyles
   };
 };

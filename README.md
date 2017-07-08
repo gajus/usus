@@ -8,6 +8,7 @@
 Renders page using [Chrome Debugging Protocol](https://chromedevtools.github.io/devtools-protocol/) (CDP). Extracts CSS used to render the page. Renders HTML with the blocking CSS made asynchronous. Inlines the critical CSS.
 
 * [Motivation](#motivation)
+  * [Use cases](#use-cases)
 * [API](#api)
 * [Configuration](#configuration)
 * [Cookbook](#cookbook)
@@ -22,6 +23,12 @@ Renders page using [Chrome Debugging Protocol](https://chromedevtools.github.io/
 I have a universal, single page application (SPA). The initial HTML is sent served by the server. I want to inline the CSS used to render the page and delay loading the rest of the CSS until after the page has loaded.
 
 Removing the blocking CSS and inlining the CSS required to render the page increases the perceived page loading speed. Presumably, improves SEO by reducing the page loading time.
+
+### Use cases
+
+* Produce HTML used to render the page. Used to render single page applications (e.g. React and Angular) to produce a static HTML. This can be used as a replacement of https://prerender.io/. Default behaviour.
+* Extract CSS used to render a specific page. Used to capture the critical CSS. Use `--extractStyles` option.
+* Produce HTML used to render the page with the critical-path CSS inlined and blocking CSS made asynchronous. Use `--inlineStyles` option.
 
 ## API
 
@@ -41,13 +48,17 @@ const css = await render('http://gajus.com/', configuration);
 
 ### Configuration
 
-`render` returns the CSS used to render the document. Using the `inlineStyles` option makes render return HTML document with CSS inlined.
+The default behaviour is to return the HTML.
+
+* Using the `--extractStyles` option returns the CSS used to render the document.
+* Using the `--inlineStyles` option returns HTML document with CSS inlined.
 
 |Name|Type|Description|Default value|
 |---|---|---|---|
 |`delay`|`number`|Defines how many milliseconds to wait after the "load" event has been fired before capturing the styles used to load the page. This is important if resources appearing on the page are being loaded asynchronously.|`number`|`5000`|
 |`deviceMetricsOverride`||See [`deviceMetricsOverride` configuration](#devicemetricsoverride-configuration)||
 |`cookies`|`Array<{name: string, value: string}>`|Sets a cookie with the given cookie data.|N/A|
+|`extractStyles`|`boolean`|Extracts CSS used to render the page.|`false`|
 |`inlineStyles`|`boolean`|Inlines the styles required to render the document.|`false`|
 |`url`|`string`|The URL to render.|N/A|
 
@@ -70,8 +81,12 @@ For more information about the `deviceMetricsOverride` configuration, refer to [
 ```bash
 $ npm install usus --global
 $ usus --help
+# Renders static HTML. Equivalent to https://prerender.io/.
 $ usus render --url http://gajus.com/
-$ usus render --url http://gajus.com/ --inlineStyles
+# Extracts CSS used to render the page.
+$ usus render --url http://gajus.com/ --extractStyles true
+# Inlines styles required to render the page.
+$ usus render --url http://gajus.com/ --inlineStyles true
 $ usus render --url http://gajus.com/ --cookies foo=bar,baz=qux
 # Render emulating the iPhone 6
 $ uses render --url http://gajus.com/ --deviceMetricsOverride.deviceScaleFactor 2 --deviceMetricsOverride.fitWindow false --deviceMetricsOverride.height 1334 --deviceMetricsOverride.mobile true --deviceMetricsOverride.width 750

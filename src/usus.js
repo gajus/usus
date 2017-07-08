@@ -131,9 +131,9 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
     });
   });
 
-  if (configuration.inlineStyles) {
-    const rootDocument = await DOM.getDocument();
+  const rootDocument = await DOM.getDocument();
 
+  if (configuration.inlineStyles) {
     const styleImportNodeIds = (await DOM.querySelectorAll({
       nodeId: rootDocument.root.nodeId,
       selector: 'head link[href*=".css"]'
@@ -163,16 +163,26 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
 
     // @todo Render <noscript> CSS import
 
-    const result = await DOM.getOuterHTML({
+    const rootOuterHTMLWithInlinedStyles = (await DOM.getOuterHTML({
       nodeId: rootDocument.root.nodeId
-    });
+    })).outerHTML;
 
     await chrome.kill();
 
-    return result.outerHTML;
+    return rootOuterHTMLWithInlinedStyles;
   }
+
+  if (configuration.extractStyles) {
+    await chrome.kill();
+
+    return usedStyles;
+  }
+
+  const rootOuterHTML = (await DOM.getOuterHTML({
+    nodeId: rootDocument.root.nodeId
+  })).outerHTML;
 
   await chrome.kill();
 
-  return usedStyles;
+  return rootOuterHTML;
 };
