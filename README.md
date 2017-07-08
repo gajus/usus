@@ -4,6 +4,7 @@
 [![Coveralls](https://img.shields.io/coveralls/gajus/usus.svg?style=flat-square)](https://coveralls.io/github/gajus/usus)
 [![NPM version](http://img.shields.io/npm/v/usus.svg?style=flat-square)](https://www.npmjs.org/package/usus)
 [![Canonical Code Style](https://img.shields.io/badge/code%20style-canonical-blue.svg?style=flat-square)](https://github.com/gajus/canonical)
+[![Twitter Follow](https://img.shields.io/twitter/follow/kuizinas.svg?style=social&label=Follow)](https://twitter.com/kuizinas)
 
 Renders page using [Chrome Debugging Protocol](https://chromedevtools.github.io/devtools-protocol/) (CDP). Extracts CSS used to render the page. Renders HTML with the blocking CSS made asynchronous. Inlines the critical CSS.
 
