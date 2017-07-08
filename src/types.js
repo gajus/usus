@@ -25,11 +25,14 @@ export type DeviceMetricsOverrideType = {
   +width: number
 };
 
+type FormatStylesType = (styles: string) => Promise<string>;
+
 export type UserConfigurationType = {
   +cookies?: $ReadOnlyArray<CookieType>,
   +delay?: number,
   +deviceMetricsOverride?: UserDeviceMetricsOverrideType,
   +extractStyles?: boolean,
+  +formatStyles?: FormatStylesType,
   +inlineStyles?: boolean
 };
 
@@ -38,5 +41,6 @@ export type ConfigurationType = {|
   +delay: number,
   +deviceMetricsOverride: DeviceMetricsOverrideType,
   +extractStyles: boolean,
+  +formatStyles?: FormatStylesType,
   +inlineStyles: boolean
 |};

@@ -19,6 +19,7 @@ export default (userConfiguration: UserConfigurationType): ConfigurationType => 
   const cookies = userConfiguration.cookies || [];
   const delayConfiguration = userConfiguration.delay || 5000;
   const extractStyles = userConfiguration.extractStyles || false;
+  const formatStyles = userConfiguration.formatStyles;
   const inlineStyles = userConfiguration.inlineStyles || false;
 
   if (extractStyles && inlineStyles) {
@@ -39,6 +40,7 @@ export default (userConfiguration: UserConfigurationType): ConfigurationType => 
     delay: delayConfiguration,
     deviceMetricsOverride,
     extractStyles,
+    formatStyles,
     inlineStyles
   };
 };

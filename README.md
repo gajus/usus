@@ -14,6 +14,7 @@ Renders page using [Chrome Debugging Protocol](https://chromedevtools.github.io/
 * [Cookbook](#cookbook)
   * [Using via the command line interface (CLI)](#using-via-the-command-line-interface-cli)
   * [Building Docker container with Chrome](#building-docker-container-with-chrome)
+  * [Minify the CSS](#minify-the-css)
   * [Debugging](#debugging)
 * [Implementation](#implementation)
 * [Alternatives](#alternatives)
@@ -60,6 +61,7 @@ The default behaviour is to return the HTML.
 |`cookies`|`Array<{name: string, value: string}>`|Sets a cookie with the given cookie data.|N/A|
 |`extractStyles`|`boolean`|Extracts CSS used to render the page.|`false`|
 |`inlineStyles`|`boolean`|Inlines the styles required to render the document.|`false`|
+|`formatStyles`|`(styles: string) => Promise<string>`|Used to format CSS. Useful with `--inlineStyles` option to format the CSS before it is inlined.|N/A|
 |`url`|`string`|The URL to render.|N/A|
 
 #### `deviceMetricsOverride` configuration
@@ -106,6 +108,29 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
 ```
 
 This assumes that you are extending from the base [`node` image](https://github.com/nodejs/docker-node).
+
+### Minify the CSS
+
+Use the `formatStyles` callback to minify/ format/ optimize/ remove CSS before it is inlined.
+
+In this example, I am using [`csso`](https://github.com/css/csso) minifier.
+
+```js
+import {
+  render
+} from 'usus';
+import {
+  minify
+} from 'csso';
+
+return render(url, {
+  formatStyles: (styles: string): Promise<string> => {
+    return minify(styles).css;
+  },
+  inlineStyles: true
+});
+
+```
 
 ### Debugging
 

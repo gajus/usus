@@ -130,7 +130,9 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
     url
   });
 
-  const usedStyles = await new Promise((resolve) => {
+  let usedStyles
+
+  usedStyles = await new Promise((resolve) => {
     Page.loadEventFired(async () => {
       debug('"load" event received; waiting %d milliseconds before capturing the CSS coverage report', configuration.delay);
 
@@ -156,6 +158,10 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
       resolve(slices.join(''));
     });
   });
+
+  if (configuration.formatStyles) {
+    usedStyles = await configuration.formatStyles(usedStyles);
+  }
 
   const rootDocument = await DOM.getDocument();
 

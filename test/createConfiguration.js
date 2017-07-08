@@ -13,6 +13,7 @@ const createDefaultConfiguration = () => {
       ...deviceMetricsOverrideDesktopProfile
     },
     extractStyles: false,
+    formatStyles: undefined,
     inlineStyles: false
   };
 };

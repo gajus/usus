@@ -5,6 +5,7 @@
   ],
   "root": true,
   "rules": {
-    "no-restricted-syntax": 0
+    "no-restricted-syntax": 0,
+    "no-undefined": 0
   }
 }
