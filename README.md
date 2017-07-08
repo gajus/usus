@@ -46,14 +46,20 @@ By default, `render` returns the CSS used to render the document. Using the `inl
 |Name|Type|Description|Default value|
 |---|---|---|---|
 |`delay`|`number`|Defines how many milliseconds to wait after the "load" event has been fired before capturing the styles used to load the page. This is important if resources appearing on the page are being loaded asynchronously.|`number`|`5000`|
-|`deviceMetricsOverride.deviceScaleFactor`|`number`|Overriding device scale factor value.|`1`|
-|`deviceMetricsOverride.fitWindow`|`boolean`|Whether a view that exceeds the available browser window area should be scaled down to fit.|`false`|
-|`deviceMetricsOverride.height`|`number`|Overriding width value in pixels (minimum 0, maximum 10000000).|`1080`|
-|`deviceMetricsOverride.width`|`number`|Overriding height value in pixels (minimum 0, maximum 10000000).|`1920`|
-|`deviceMetricsOverride.mobile`|`boolean`|Whether to emulate mobile device. This includes viewport meta tag, overlay scrollbars, text autosizing and more.|`false`|
+|`deviceMetricsOverride`||See [`deviceMetricsOverride` configuration](#devicemetricsoverride-configuration)||
 |`cookies`|`Array<{name: string, value: string}>`|Sets a cookie with the given cookie data.|N/A|
 |`inlineStyles`|`boolean`|Inlines the styles required to render the document.|`false`|
 |`url`|`string`|The URL to render.|N/A|
+
+#### `deviceMetricsOverride` configuration
+
+|Name|Type|Description|Default value|
+|---|---|---|---|
+|`deviceScaleFactor`|`number`|Overriding device scale factor value.|`1`|
+|`fitWindow`|`boolean`|Whether a view that exceeds the available browser window area should be scaled down to fit.|`false`|
+|`height`|`number`|Overriding width value in pixels (minimum 0, maximum 10000000).|`1080`|
+|`width`|`number`|Overriding height value in pixels (minimum 0, maximum 10000000).|`1920`|
+|`mobile`|`boolean`|Whether to emulate mobile device. This includes viewport meta tag, overlay scrollbars, text autosizing and more.|`false`|
 
 For more information about the `deviceMetricsOverride` configuration, refer to [Chrome DevTools Protocol Viewer documentation](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setDeviceMetricsOverride).
 
