@@ -71,7 +71,7 @@ const inlineImports = async (DOM: *, Runtime: *, rootNodeId: number, styleImport
 
   await DOM.setOuterHTML({
     nodeId,
-    outerHTML: styleImports
+    outerHTML: styleImports.join('\n')
   });
 };
 
