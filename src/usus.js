@@ -130,7 +130,7 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
     url
   });
 
-  let usedStyles
+  let usedStyles;
 
   usedStyles = await new Promise((resolve) => {
     Page.loadEventFired(async () => {
