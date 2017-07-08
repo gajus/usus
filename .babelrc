@@ -1,0 +1,30 @@
+{
+  "env": {
+    "development": {
+      "plugins": [
+        "istanbul"
+      ],
+      "sourceMaps": "inline"
+    }
+  },
+  "plugins": [
+    [
+      "transform-object-rest-spread",
+      {
+        "useBuiltIns": true
+      }
+    ],
+    "transform-flow-strip-types"
+  ],
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "node": 8
+        },
+        "useBuiltIns": true
+      }
+    ]
+  ]
+}
