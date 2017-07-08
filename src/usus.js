@@ -24,42 +24,68 @@ const launchChrome = () => {
   });
 };
 
-const inlineStyles = async (Runtime: *, styles: string) => {
+const inlineStyles = async (DOM: *, Runtime: *, rootNodeId: number, styles: string) => {
   // @todo I am sure there is a better way to do this,
   // but I cannot find it documented in the https://chromedevtools.github.io/devtools-protocol/tot/DOM/
   // e.g. How to create a new node using CDP DOM API?
   await Runtime.evaluate({
     expression: `
-      const styleElement = document.createElement('style');
-
-      styleElement.innerHTML = \`${styles}\`;
-
+      const styleElement = document.createElement('div');
+      styleElement.setAttribute('id', 'usus-inline-styles');
       document.head.appendChild(styleElement);
     `
   });
+
+  const nodeId = (await DOM.querySelector({
+    nodeId: rootNodeId,
+    selector: '#usus-inline-styles'
+  })).nodeId;
+
+  debug('#usus-inline-styles nodeId %d', nodeId);
+
+  const stylesheet = `<style>${styles}</style>`;
+
+  await DOM.setOuterHTML({
+    nodeId,
+    outerHTML: stylesheet
+  });
 };
 
-const inlineImports = async (Runtime: *, styleImports: $ReadOnlyArray<string>) => {
+const inlineImports = async (DOM: *, Runtime: *, rootNodeId: number, styleImports: $ReadOnlyArray<string>) => {
   // @todo See note in inlineStyles.
 
   const innerHTML = styleImports.join('').replace(/'/g, '\\\'');
 
   await Runtime.evaluate({
     expression: `
-      const scriptElement = document.createElement('script');
-
-      scriptElement.innerHTML = \`
-        document.addEventListener('load', function () {
-          var styleContainer = document.createElement('div');
-
-          styleContainer.innerHTML = '${innerHTML}';
-
-          document.body.appendChild(styleContainer);
-        });
-      \`;
-
+      const scriptElement = document.createElement('div');
+      scriptElement.setAttribute('id', 'usus-style-import');
       document.head.appendChild(scriptElement);
     `
+  });
+
+  const nodeId = (await DOM.querySelector({
+    nodeId: rootNodeId,
+    selector: '#usus-style-import'
+  })).nodeId;
+
+  debug('#usus-style-import nodeId %d', nodeId);
+
+  const script = `
+    <script>
+    document.addEventListener('load', function () {
+      var styleContainer = document.createElement('div');
+
+      styleContainer.innerHTML = '${innerHTML}';
+
+      document.body.appendChild(styleContainer);
+    });
+    </script>
+  `;
+
+  await DOM.setOuterHTML({
+    nodeId,
+    outerHTML: script
   });
 };
 
@@ -158,8 +184,8 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
       styleImportLinks.push(styleImportNodeHtml.outerHTML);
     }
 
-    await inlineStyles(Runtime, usedStyles);
-    await inlineImports(Runtime, styleImportLinks);
+    await inlineStyles(DOM, Runtime, rootDocument.root.nodeId, usedStyles);
+    await inlineImports(DOM, Runtime, rootDocument.root.nodeId, styleImportLinks);
 
     // @todo Render <noscript> CSS import
 
