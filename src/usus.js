@@ -58,7 +58,7 @@ const inlineImports = async (DOM: *, Runtime: *, rootNodeId: number, styleImport
     expression: `
       const scriptElement = document.createElement('div');
       scriptElement.setAttribute('id', 'usus-style-import');
-      document.head.appendChild(scriptElement);
+      document.body.appendChild(scriptElement);
     `
   });
 
