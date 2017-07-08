@@ -167,8 +167,12 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
       nodeId: rootDocument.root.nodeId
     });
 
+    await chrome.kill();
+
     return result.outerHTML;
   }
+
+  await chrome.kill();
 
   return usedStyles;
 };
