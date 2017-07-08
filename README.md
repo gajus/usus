@@ -7,6 +7,8 @@
 
 Renders page using [Chrome Debugging Protocol](https://chromedevtools.github.io/devtools-protocol/) (CDP). Extracts CSS used to render the page. Renders HTML with the blocking CSS made asynchronous. Inlines the critical CSS.
 
+> Article about ūsus ⚡️🤘: [Pre-rendering SPA for SEO and improved perceived page loading speed](https://medium.com/@gajus/pre-rendering-spa-for-seo-and-improved-perceived-page-loading-speed-47075aa16d24)
+
 * [Motivation](#motivation)
   * [Use cases](#use-cases)
 * [API](#api)
