@@ -11,6 +11,7 @@ Renders webpage using the [Chrome Debugging Protocol](https://chromedevtools.git
 > Article about ūsus ⚡️🤘: [Pre-rendering SPA for SEO and improved perceived page loading speed](https://medium.com/@gajus/pre-rendering-spa-for-seo-and-improved-perceived-page-loading-speed-47075aa16d24)
 
 * [Motivation](#motivation)
+  * [Demo](#demo)
   * [Use cases](#use-cases)
 * [API](#api)
 * [Configuration](#configuration)
@@ -27,6 +28,13 @@ Renders webpage using the [Chrome Debugging Protocol](https://chromedevtools.git
 I have a universal, single page application (SPA). The initial HTML is sent served by the server. I want to inline the CSS used to render the page and delay loading the rest of the CSS until after the page has loaded.
 
 Removing the blocking CSS and inlining the CSS required to render the page increases the perceived page loading speed. Presumably, improves SEO by reducing the page loading time.
+
+### Demo
+
+Examples of web pages using ūsus:
+
+* https://go2cinema.com/movies/baywatch-2017-1198354
+* https://go2cinema.com/venues/odeon-leicester-square-1001206
 
 ### Use cases
 
