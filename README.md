@@ -15,6 +15,7 @@ Renders webpage using the [Chrome Debugging Protocol](https://chromedevtools.git
   * [Use cases](#use-cases)
 * [API](#api)
 * [Configuration](#configuration)
+* [Dependencies](#dependencies)
 * [Cookbook](#cookbook)
   * [Using via the command line interface (CLI)](#using-via-the-command-line-interface-cli)
   * [Building Docker container with Chrome](#building-docker-container-with-chrome)
@@ -86,6 +87,12 @@ The default behaviour is to return the HTML.
 |`mobile`|`boolean`|Whether to emulate mobile device. This includes viewport meta tag, overlay scrollbars, text autosizing and more.|`false`|
 
 For more information about the `deviceMetricsOverride` configuration, refer to [Chrome DevTools Protocol Viewer documentation](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setDeviceMetricsOverride).
+
+## Dependencies
+
+ūsus depends on [Chrome v59+](https://developers.google.com/web/updates/2017/04/headless-chrome).
+
+For Docker installation instructions, refer to [Building Docker container with Chrome](#building-docker-container-with-chrome).
 
 ## Cookbook
 
