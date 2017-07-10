@@ -13,6 +13,8 @@ Webpage pre-rendering service. ⚡️
 * Renders HTML with the blocking CSS made asynchronous.
 * Inlines the critical CSS.
 
+<!-- -->
+
 * [Motivation](#motivation)
   * [Demo](#demo)
   * [Use cases](#use-cases)
