@@ -8,12 +8,14 @@
 
 Webpage pre-rendering service. ⚡️
 
+## Features
+
 * Renders webpage using the [Chrome Debugging Protocol](https://chromedevtools.github.io/devtools-protocol/) (CDP).
 * Extracts CSS used to render the page.
 * Renders HTML with the blocking CSS made asynchronous.
 * Inlines the critical CSS.
 
-<!-- -->
+---
 
 * [Motivation](#motivation)
   * [Demo](#demo)
