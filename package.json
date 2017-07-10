@@ -39,7 +39,7 @@
     "semantic-release": "^6.3.6"
   },
   "engines": {
-    "node": ">8"
+    "node": ">6"
   },
   "keywords": [
     "css",
