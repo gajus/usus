@@ -6,16 +6,20 @@
 [![Canonical Code Style](https://img.shields.io/badge/code%20style-canonical-blue.svg?style=flat-square)](https://github.com/gajus/canonical)
 [![Twitter Follow](https://img.shields.io/twitter/follow/kuizinas.svg?style=social&label=Follow)](https://twitter.com/kuizinas)
 
-Renders webpage using the [Chrome Debugging Protocol](https://chromedevtools.github.io/devtools-protocol/) (CDP). Extracts CSS used to render the page. Renders HTML with the blocking CSS made asynchronous. Inlines the critical CSS.
+Webpage pre-rendering service. ⚡️
 
-> Article about ūsus ⚡️🤘: [Pre-rendering SPA for SEO and improved perceived page loading speed](https://medium.com/@gajus/pre-rendering-spa-for-seo-and-improved-perceived-page-loading-speed-47075aa16d24)
+* Renders webpage using the [Chrome Debugging Protocol](https://chromedevtools.github.io/devtools-protocol/) (CDP).
+* Extracts CSS used to render the page.
+* Renders HTML with the blocking CSS made asynchronous.
+* Inlines the critical CSS.
 
 * [Motivation](#motivation)
   * [Demo](#demo)
   * [Use cases](#use-cases)
-* [API](#api)
-* [Configuration](#configuration)
-* [Dependencies](#dependencies)
+* [Node.js API](#nodejs-api)
+  * [Configuration](#configuration)
+* [Installation](#installation)
+  * [Dependencies](#dependencies)
 * [Cookbook](#cookbook)
   * [Using via the command line interface (CLI)](#using-via-the-command-line-interface-cli)
   * [Building Docker container with Chrome](#building-docker-container-with-chrome)
@@ -26,9 +30,11 @@ Renders webpage using the [Chrome Debugging Protocol](https://chromedevtools.git
 
 ## Motivation
 
-I have a universal, single page application (SPA). The initial HTML is sent served by the server. I want to inline the CSS used to render the page and delay loading the rest of the CSS until after the page has loaded.
+Static HTML pages with inline CSS load faster and are better indexed than single page applications (SPA). ūsus pre-renders single page applications into static HTML with the critical CSS inlined.
 
 Removing the blocking CSS and inlining the CSS required to render the page increases the perceived page loading speed. Presumably, improves SEO by reducing the page loading time.
+
+Read [Pre-rendering SPA for SEO and improved perceived page loading speed](https://medium.com/@gajus/pre-rendering-spa-for-seo-and-improved-perceived-page-loading-speed-47075aa16d24).
 
 ### Demo
 
@@ -43,7 +49,9 @@ Examples of web pages using ūsus:
 * Extract CSS used to render a specific page. Used to capture the critical CSS. Use `--extractStyles` option.
 * Produce HTML used to render the page with the critical-path CSS inlined and blocking CSS made asynchronous. Use `--inlineStyles` option.
 
-## API
+## Node.js API
+
+ūsus can be used either as a Node.js dependency or as a [CLI program](#using-via-the-command-line-interface-cli).
 
 ```js
 import {
@@ -53,13 +61,40 @@ import {
 /**
  * @see https://github.com/gajus/usus#configuration
  */
-const configuration = {}
+const configuration: UserConfigurationType = {}
 
 const css = await render('http://gajus.com/', configuration);
 
 ```
 
 ### Configuration
+
+```js
+type CookieType = {|
+  +name: string,
+  +value: string
+|};
+
+export type UserDeviceMetricsOverrideType = {
+  +deviceScaleFactor?: number,
+  +fitWindow?: boolean,
+  +height?: number,
+  +mobile?: boolean,
+  +width?: number
+};
+
+type FormatStylesType = (styles: string) => Promise<string>;
+
+export type UserConfigurationType = {
+  +cookies?: $ReadOnlyArray<CookieType>,
+  +delay?: number,
+  +deviceMetricsOverride?: UserDeviceMetricsOverrideType,
+  +extractStyles?: boolean,
+  +formatStyles?: FormatStylesType,
+  +inlineStyles?: boolean
+};
+
+```
 
 The default behaviour is to return the HTML.
 
@@ -88,7 +123,11 @@ The default behaviour is to return the HTML.
 
 For more information about the `deviceMetricsOverride` configuration, refer to [Chrome DevTools Protocol Viewer documentation](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setDeviceMetricsOverride).
 
-## Dependencies
+## Installation
+
+Using ūsus requires to install [`usus` NPM](https://www.npmjs.com/package/usus) package and [Google Chrome](https://www.google.com/chrome/index.html) browser (refer to [Dependencies](#dependencies)).
+
+### Dependencies
 
 ūsus depends on [Chrome v59+](https://developers.google.com/web/updates/2017/04/headless-chrome).
 
@@ -126,7 +165,7 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
 
 This assumes that you are extending from the base [`node` image](https://github.com/nodejs/docker-node).
 
-### Minify the CSS
+### Minifying the CSS
 
 Use the `formatStyles` callback to minify/ format/ optimize/ remove CSS before it is inlined.
 

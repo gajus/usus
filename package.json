@@ -19,7 +19,7 @@
     "debug": "^2.6.8",
     "yargs": "^8.0.2"
   },
-  "description": "Renders page using Chrome Debugging Protocol (CDP). Extracts CSS used to render the page. Renders HTML with the blocking CSS made asynchronous. Inlines the critical CSS.",
+  "description": "Webpage pre-rendering service. ⚡️",
   "devDependencies": {
     "ava": "^0.19.1",
     "babel-cli": "^6.24.1",
