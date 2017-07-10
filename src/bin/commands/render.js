@@ -88,7 +88,7 @@ export const handler = async (argv: Object) => {
   }
 
   const css = await render(argv.url, {
-    argv,
+    ...argv,
     cookies
   });
 
