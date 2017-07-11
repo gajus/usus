@@ -74,6 +74,11 @@ const css = await render('http://gajus.com/', configuration);
 ### Configuration
 
 ```js
+// Flow type annotations included for user reference only.
+// ūsus does not depend or require use of Flow type.
+//
+// Refer to the table below for an alternative form of documentation.
+
 type CookieType = {|
   +name: string,
   +value: string
