@@ -69,7 +69,25 @@ export const builder = (yargs: Object): void => {
         demand: true,
         description: 'The URL to render.'
       }
-    });
+    })
+    .epilogue(`
+Usage:
+
+# Renders static HTML. Equivalent to https://prerender.io/.
+$ usus render --url http://gajus.com/
+
+# Extracts CSS used to render the page.
+$ usus render --url http://gajus.com/ --extractStyles true
+
+# Inlines styles required to render the page.
+$ usus render --url http://gajus.com/ --inlineStyles true
+
+# Use cookies when loading the page.
+$ usus render --url http://gajus.com/ --cookies foo=bar,baz=qux
+
+# Render emulating a mobile device (example is using iPhone 6 parameters).
+$ usus render --url http://gajus.com/ --deviceMetricsOverride.deviceScaleFactor 2 --deviceMetricsOverride.fitWindow false --deviceMetricsOverride.height 1334 --deviceMetricsOverride.mobile true --deviceMetricsOverride.width 750
+    `);
 };
 
 // eslint-disable-next-line flowtype/no-weak-types

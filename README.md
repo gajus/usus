@@ -151,14 +151,15 @@ For Docker installation instructions, refer to [Building Docker container with C
 ```bash
 $ npm install usus --global
 $ usus --help
+# usus <command> --help
+$ usus render --help
 # Renders static HTML. Equivalent to https://prerender.io/.
 $ usus render --url http://gajus.com/
-# Extracts CSS used to render the page.
-$ usus render --url http://gajus.com/ --extractStyles true
 # Inlines styles required to render the page.
 $ usus render --url http://gajus.com/ --inlineStyles true
+# Use cookies when loading the page.
 $ usus render --url http://gajus.com/ --cookies foo=bar,baz=qux
-# Render emulating the iPhone 6
+# Render emulating a mobile device (example is using iPhone 6 parameters).
 $ usus render --url http://gajus.com/ --deviceMetricsOverride.deviceScaleFactor 2 --deviceMetricsOverride.fitWindow false --deviceMetricsOverride.height 1334 --deviceMetricsOverride.mobile true --deviceMetricsOverride.width 750
 
 ```
