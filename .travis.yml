@@ -1,5 +1,6 @@
 os:
   - linux
+dist: trusty
 language: node_js
 node_js:
   - node
@@ -22,7 +23,6 @@ after_success:
   - semantic-release post
 notifications:
   email: false
-sudo: false
 before_script:
   - export DISPLAY=:99.0
   - export LIGHTHOUSE_CHROMIUM_PATH="$(pwd)/chrome-linux/chrome"
