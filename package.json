@@ -12,34 +12,35 @@
   },
   "bin": "./dist/bin/index.js",
   "dependencies": {
-    "bluefeather": "^2.6.0",
+    "bluefeather": "^2.7.0",
     "chrome-launcher": "^0.3.1",
-    "chrome-remote-interface": "^0.24.0",
+    "chrome-remote-interface": "^0.24.1",
     "death": "^1.1.0",
     "debug": "^2.6.8",
     "yargs": "^8.0.2"
   },
   "description": "Webpage pre-rendering service. ⚡️",
   "devDependencies": {
-    "ava": "^0.19.1",
+    "ava": "^0.20.0",
     "babel-cli": "^6.24.1",
     "babel-plugin-istanbul": "^4.1.4",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
-    "babel-preset-env": "^1.5.1",
+    "babel-preset-env": "^1.6.0",
     "babel-register": "^6.24.1",
     "coveralls": "^2.13.1",
-    "eslint": "^3.19.0",
-    "eslint-config-canonical": "^8.2.1",
-    "flow-bin": "^0.47.0",
-    "flow-copy-source": "^1.1.0",
-    "husky": "^0.13.4",
+    "eslint": "^4.2.0",
+    "eslint-config-canonical": "^9.3.1",
+    "fastify": "^0.25.0",
+    "flow-bin": "^0.49.1",
+    "flow-copy-source": "^1.2.0",
+    "husky": "^0.14.3",
     "nock": "^9.0.13",
-    "nyc": "^11.0.2",
+    "nyc": "^11.0.3",
     "semantic-release": "^6.3.6"
   },
   "engines": {
-    "node": ">7"
+    "node": ">6"
   },
   "keywords": [
     "css",

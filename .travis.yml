@@ -3,6 +3,7 @@ node_js:
   - node
   - 8
   - 7
+  - 6
 before_install:
   - npm config set depth 0
 script:
