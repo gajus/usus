@@ -14,7 +14,8 @@ const createDefaultConfiguration = () => {
     },
     extractStyles: false,
     formatStyles: undefined,
-    inlineStyles: false
+    inlineStyles: false,
+    preloadStyles: true
   };
 };
 

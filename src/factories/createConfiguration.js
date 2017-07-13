@@ -21,6 +21,7 @@ export default (userConfiguration: UserConfigurationType): ConfigurationType => 
   const extractStyles = userConfiguration.extractStyles || false;
   const formatStyles = userConfiguration.formatStyles;
   const inlineStyles = userConfiguration.inlineStyles || false;
+  const preloadStyles = userConfiguration.preloadStyles !== false;
 
   if (extractStyles && inlineStyles) {
     throw new Error('inlineStyles and inlineStyles options cannot be used together.');
@@ -41,6 +42,7 @@ export default (userConfiguration: UserConfigurationType): ConfigurationType => 
     deviceMetricsOverride,
     extractStyles,
     formatStyles,
-    inlineStyles
+    inlineStyles,
+    preloadStyles
   };
 };

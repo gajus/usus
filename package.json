@@ -17,6 +17,7 @@
     "chrome-remote-interface": "^0.24.1",
     "death": "^1.1.0",
     "debug": "^2.6.8",
+    "surgeon": "^2.1.0",
     "yargs": "^8.0.2"
   },
   "description": "Webpage pre-rendering service. ⚡️",

@@ -52,6 +52,11 @@ export const baseConfiguration = {
     default: false,
     description: 'Inlines the styles required to render the document.',
     type: 'boolean'
+  },
+  preloadStyles: {
+    default: true,
+    description: 'Adds rel=preload for all styles removed from <head>. Used with inlineStyles=true.',
+    type: 'boolean'
   }
 };
 

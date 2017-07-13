@@ -33,7 +33,8 @@ export type UserConfigurationType = {
   +deviceMetricsOverride?: UserDeviceMetricsOverrideType,
   +extractStyles?: boolean,
   +formatStyles?: FormatStylesType,
-  +inlineStyles?: boolean
+  +inlineStyles?: boolean,
+  +preloadStyles?: boolean
 };
 
 export type ConfigurationType = {|
@@ -42,5 +43,6 @@ export type ConfigurationType = {|
   +deviceMetricsOverride: DeviceMetricsOverrideType,
   +extractStyles: boolean,
   +formatStyles?: FormatStylesType,
-  +inlineStyles: boolean
+  +inlineStyles: boolean,
+  +preloadStyles: boolean
 |};

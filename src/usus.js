@@ -5,6 +5,7 @@ import {
 } from 'chrome-launcher';
 import CDP from 'chrome-remote-interface';
 import createDebug from 'debug';
+import surgeon from 'surgeon';
 import {
   delay
 } from 'bluefeather';
@@ -30,9 +31,11 @@ const inlineStyles = async (DOM: *, Runtime: *, rootNodeId: number, styles: stri
   // e.g. How to create a new node using CDP DOM API?
   await Runtime.evaluate({
     expression: `
-      const styleElement = document.createElement('div');
-      styleElement.setAttribute('id', 'usus-inline-styles');
-      document.head.appendChild(styleElement);
+      {
+        const styleElement = document.createElement('div');
+        styleElement.setAttribute('id', 'usus-inline-styles');
+        document.head.appendChild(styleElement);
+      }
     `
   });
 
@@ -56,9 +59,11 @@ const inlineImports = async (DOM: *, Runtime: *, rootNodeId: number, styleImport
 
   await Runtime.evaluate({
     expression: `
-      const scriptElement = document.createElement('div');
-      scriptElement.setAttribute('id', 'usus-style-import');
-      document.body.appendChild(scriptElement);
+      {
+        const scriptElement = document.createElement('div');
+        scriptElement.setAttribute('id', 'usus-style-import');
+        document.body.appendChild(scriptElement);
+      }
     `
   });
 
@@ -72,6 +77,41 @@ const inlineImports = async (DOM: *, Runtime: *, rootNodeId: number, styleImport
   await DOM.setOuterHTML({
     nodeId,
     outerHTML: styleImports.join('\n')
+  });
+};
+
+const inlineStylePreload = async (DOM: *, Runtime: *, rootNodeId: number, styleImports: $ReadOnlyArray<string>) => {
+  // @todo See note in inlineStyles.
+
+  await Runtime.evaluate({
+    expression: `
+      {
+        const scriptElement = document.createElement('div');
+        scriptElement.setAttribute('id', 'usus-style-preload');
+        document.head.appendChild(scriptElement);
+      }
+    `
+  });
+
+  const nodeId = (await DOM.querySelector({
+    nodeId: rootNodeId,
+    selector: '#usus-style-preload'
+  })).nodeId;
+
+  debug('#usus-style-preload nodeId %d', nodeId);
+
+  const x = surgeon();
+
+  const styleUrls = x('select link {0,} | read attribute href', styleImports.join(''));
+
+  const stylePreloadLinks = styleUrls
+    .map((styleUrl) => {
+      return `<link rel="preload" href="${styleUrl}" as="style">`;
+    });
+
+  await DOM.setOuterHTML({
+    nodeId,
+    outerHTML: stylePreloadLinks.join('\n')
   });
 };
 
@@ -174,6 +214,10 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
       });
 
       styleImportLinks.push(styleImportNodeHtml.outerHTML);
+    }
+
+    if (configuration.preloadStyles) {
+      await inlineStylePreload(DOM, Runtime, rootDocument.root.nodeId, styleImportLinks);
     }
 
     await inlineStyles(DOM, Runtime, rootDocument.root.nodeId, usedStyles);

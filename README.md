@@ -100,7 +100,8 @@ export type UserConfigurationType = {
   +deviceMetricsOverride?: UserDeviceMetricsOverrideType,
   +extractStyles?: boolean,
   +formatStyles?: FormatStylesType,
-  +inlineStyles?: boolean
+  +inlineStyles?: boolean,
+  +preloadStyles?: boolean
 };
 
 ```
@@ -112,12 +113,13 @@ The default behaviour is to return the HTML.
 
 |Name|Type|Description|Default value|
 |---|---|---|---|
+|`cookies`|`Array<{name: string, value: string}>`|Sets a cookie with the given cookie data.|N/A|
 |`delay`|`number`|Defines how many milliseconds to wait after the "load" event has been fired before capturing the styles used to load the page. This is important if resources appearing on the page are being loaded asynchronously.|`number`|`5000`|
 |`deviceMetricsOverride`||See [`deviceMetricsOverride` configuration](#devicemetricsoverride-configuration)||
-|`cookies`|`Array<{name: string, value: string}>`|Sets a cookie with the given cookie data.|N/A|
 |`extractStyles`|`boolean`|Extracts CSS used to render the page.|`false`|
+|`formatStyles`|`(styles: string) => Promise<string>`|Used to format CSS. Useful with `inlineStyles=true` option to format the CSS before it is inlined.|N/A|
 |`inlineStyles`|`boolean`|Inlines the styles required to render the document.|`false`|
-|`formatStyles`|`(styles: string) => Promise<string>`|Used to format CSS. Useful with `--inlineStyles` option to format the CSS before it is inlined.|N/A|
+|`preloadStyles`|`boolean`|Adds `rel=preload` for all styles removed from `<head>`. Used with `inlineStyles=true`.|`true`|
 |`url`|`string`|The URL to render.|N/A|
 
 #### `deviceMetricsOverride` configuration

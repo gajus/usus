@@ -34,7 +34,48 @@ test('renders HTML', async (t) => {
   `));
 });
 
-test('inlines CSS', async (t) => {
+test('inlines CSS (preloadStyles=false)', async (t) => {
+  const styleServer = await serve(`
+    body {
+      background: #f00;
+    }
+  `, 'text/css');
+
+  const server = await serve(`
+    <html>
+      <head>
+        <link rel='stylesheet' href='${styleServer.url}'>
+      </head>
+      <body>
+        <p>Hello, World!</p>
+      </body>
+    </html>
+  `);
+
+  const result = await render(server.url, {
+    delay: 500,
+    inlineStyles: true,
+    preloadStyles: false
+  });
+
+  await styleServer.close();
+  await server.close();
+
+  t.true(isHtmlEqual(result, `
+    <html>
+      <head>
+        <style>body { background: #f00; }</style>
+      </head>
+      <body>
+        <p>Hello, World!</p>
+
+        <link href="${styleServer.url}" rel="stylesheet">
+      </body>
+    </html>`
+  ));
+});
+
+test('inlines CSS (preloadStyles=true)', async (t) => {
   const styleServer = await serve(`
     body {
       background: #f00;
@@ -63,6 +104,7 @@ test('inlines CSS', async (t) => {
   t.true(isHtmlEqual(result, `
     <html>
       <head>
+        <link as="style" href="${styleServer.url}" rel="preload">
         <style>body { background: #f00; }</style>
       </head>
       <body>
