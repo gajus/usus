@@ -14,6 +14,7 @@ Webpage pre-rendering service. ⚡️
 * Extracts CSS used to render the page.
 * Renders HTML with the blocking CSS made asynchronous.
 * Inlines the critical CSS.
+* Preloads CSS and fonts used to render the page using `rel=preload`.
 
 ---
 
