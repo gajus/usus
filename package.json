@@ -34,6 +34,8 @@
     "fastify": "^0.25.0",
     "flow-bin": "^0.49.1",
     "flow-copy-source": "^1.2.0",
+    "get-port": "^3.1.0",
+    "html-differ": "^1.3.4",
     "husky": "^0.14.3",
     "nock": "^9.0.13",
     "nyc": "^11.0.3",
@@ -70,7 +72,7 @@
     "build": "rm -fr ./dist && NODE_ENV=production babel ./src --out-dir ./dist --copy-files --source-maps && flow-copy-source src dist",
     "lint": "eslint ./src ./test && flow",
     "precommit": "npm run lint && npm run test && npm run build",
-    "test": "NODE_ENV=development nyc --reporter=text ava --verbose --serial"
+    "test": "NODE_ENV=development nyc --reporter=text ava --verbose --serial test/createConfiguration.js test/usus.js"
   },
   "version": "1.0.1"
 }
