@@ -57,6 +57,11 @@ export const baseConfiguration = {
     description: 'Inlines the styles required to render the document.',
     type: 'boolean'
   },
+  preloadFonts: {
+    default: true,
+    description: 'Adds rel=preload for all fonts required to render the page.',
+    type: 'boolean'
+  },
   preloadStyles: {
     default: true,
     description: 'Adds rel=preload for all styles removed from <head>. Used with inlineStyles=true.',

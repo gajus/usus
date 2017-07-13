@@ -35,6 +35,7 @@ export type UserConfigurationType = {
   +extractStyles?: boolean,
   +formatStyles?: FormatStylesType,
   +inlineStyles?: boolean,
+  +preloadFonts?: boolean,
   +preloadStyles?: boolean
 };
 
@@ -46,5 +47,6 @@ export type ConfigurationType = {|
   +extractStyles: boolean,
   +formatStyles?: FormatStylesType,
   +inlineStyles: boolean,
+  +preloadFonts: boolean,
   +preloadStyles: boolean
 |};

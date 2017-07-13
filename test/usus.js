@@ -95,6 +95,51 @@ test('inlines CSS (preloadStyles=false)', async (t) => {
   ));
 });
 
+test('inlines CSS (preloadFonts=true)', async (t) => {
+  const server = await serve(`
+    <html>
+      <head>
+        <style>
+        @import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+        body {
+          font-family: 'Open Sans', sans-serif;
+        }
+        </style>
+      </head>
+      <body>
+        <p>Hello, World!</p>
+      </body>
+    </html>
+  `);
+
+  const result = await render(server.url, {
+    chromePort,
+    delay: 500,
+    inlineStyles: true
+  });
+
+  await server.close();
+
+  t.true(isHtmlEqual(result, `
+    <html>
+      <head>
+        <style>
+        @import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+        body {
+          font-family: 'Open Sans', sans-serif;
+        }
+        </style>
+        <link rel="preload" href="https://fonts.gstatic.com/s/opensans/v14/cJZKeOuBrn4kERxqtaUH3ZBw1xU1rKptJj_0jans920.woff2" as="font">
+      </head>
+      <body>
+        <p>Hello, World!</p>
+      </body>
+    </html>`
+  ));
+});
+
 test('inlines CSS (preloadStyles=true)', async (t) => {
   const styleServer = await serve(`
     body {

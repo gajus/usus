@@ -1,5 +1,6 @@
 // @flow
 
+import URL from 'url';
 import {
   launch
 } from 'chrome-launcher';
@@ -10,6 +11,7 @@ import {
   delay
 } from 'bluefeather';
 import createConfiguration from './factories/createConfiguration';
+import normalizeNetworkResourceUrl from './utilities/normalizeNetworkResourceUrl';
 import type {
   UserConfigurationType
 } from './types';
@@ -115,6 +117,37 @@ const inlineStylePreload = async (DOM: *, Runtime: *, rootNodeId: number, styleI
   });
 };
 
+const inlineFontPreload = async (DOM: *, Runtime: *, rootNodeId: number, fontUrls: $ReadOnlyArray<string>) => {
+  // @todo See note in inlineStyles.
+
+  await Runtime.evaluate({
+    expression: `
+      {
+        const scriptElement = document.createElement('div');
+        scriptElement.setAttribute('id', 'usus-font-preload');
+        document.head.appendChild(scriptElement);
+      }
+    `
+  });
+
+  const nodeId = (await DOM.querySelector({
+    nodeId: rootNodeId,
+    selector: '#usus-font-preload'
+  })).nodeId;
+
+  debug('#usus-font-preload nodeId %d', nodeId);
+
+  const stylePreloadLinks = fontUrls
+    .map((fontUrl) => {
+      return `<link rel="preload" href="${fontUrl}" as="font">`;
+    });
+
+  await DOM.setOuterHTML({
+    nodeId,
+    outerHTML: stylePreloadLinks.join('\n')
+  });
+};
+
 export const render = async (url: string, userConfiguration: UserConfigurationType = {}): Promise<string> => {
   const configuration = createConfiguration(userConfiguration);
 
@@ -150,15 +183,16 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
     CSS,
     DOM,
     Emulation,
+    Network,
     Page,
-    Runtime,
-    Network
+    Runtime
   } = protocol;
 
   await DOM.enable();
   await CSS.enable();
   await Page.enable();
   await Runtime.enable();
+  await Network.enable();
 
   Emulation.setDeviceMetricsOverride(configuration.deviceMetricsOverride);
 
@@ -194,6 +228,34 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
 
   const frame = await Page.navigate({
     url
+  });
+
+  const downloadedFontUrls = [];
+
+  Network.requestWillBeSent((request) => {
+    if (request.frameId !== frame.frameId) {
+      debug('ignoring HTTP request; alien frame');
+
+      return;
+    }
+
+    const tokens = URL.parse(request.request.url);
+
+    const pathname = tokens.pathname;
+
+    if (!pathname) {
+      debug('ignoring HTTP request; URL is missing pathname');
+
+      return;
+    }
+
+    if (!pathname.endsWith('.woff') && !pathname.endsWith('.woff2')) {
+      debug('ignoring HTTP request; network resource is not a supported font');
+
+      return;
+    }
+
+    downloadedFontUrls.push(normalizeNetworkResourceUrl(url, tokens.href));
   });
 
   const frameId = frame.frameId;
@@ -279,6 +341,10 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
 
     if (configuration.preloadStyles) {
       await inlineStylePreload(DOM, Runtime, rootDocument.root.nodeId, styleImportLinks);
+    }
+
+    if (configuration.preloadFonts) {
+      await inlineFontPreload(DOM, Runtime, rootDocument.root.nodeId, downloadedFontUrls);
     }
 
     if (usedStyles) {

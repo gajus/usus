@@ -22,6 +22,7 @@ export default (userConfiguration: UserConfigurationType): ConfigurationType => 
   const extractStyles = userConfiguration.extractStyles || false;
   const formatStyles = userConfiguration.formatStyles;
   const inlineStyles = userConfiguration.inlineStyles || false;
+  const preloadFonts = userConfiguration.preloadFonts !== false;
   const preloadStyles = userConfiguration.preloadStyles !== false;
 
   if (extractStyles && inlineStyles) {
@@ -45,6 +46,7 @@ export default (userConfiguration: UserConfigurationType): ConfigurationType => 
     extractStyles,
     formatStyles,
     inlineStyles,
+    preloadFonts,
     preloadStyles
   };
 };

@@ -73,7 +73,7 @@
     "build": "rm -fr ./dist && NODE_ENV=production babel ./src --out-dir ./dist --copy-files --source-maps && flow-copy-source src dist",
     "lint": "eslint ./src ./test && flow",
     "precommit": "npm run lint && npm run test && npm run build",
-    "test": "NODE_ENV=development nyc --reporter=text ava --verbose --serial test/createConfiguration.js test/usus.js"
+    "test": "NODE_ENV=development nyc --reporter=text ava --verbose --serial test/factories/* test/utilities/* test/usus.js"
   },
   "version": "1.0.1"
 }

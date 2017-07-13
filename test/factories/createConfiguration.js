@@ -3,7 +3,7 @@
 import test from 'ava';
 import createConfiguration, {
   deviceMetricsOverrideDesktopProfile
-} from '../src/factories/createConfiguration';
+} from '../../src/factories/createConfiguration';
 
 const createDefaultConfiguration = () => {
   return {
@@ -16,6 +16,7 @@ const createDefaultConfiguration = () => {
     extractStyles: false,
     formatStyles: undefined,
     inlineStyles: false,
+    preloadFonts: true,
     preloadStyles: true
   };
 };

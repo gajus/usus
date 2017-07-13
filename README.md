@@ -102,6 +102,7 @@ export type UserConfigurationType = {
   +extractStyles?: boolean,
   +formatStyles?: FormatStylesType,
   +inlineStyles?: boolean,
+  +preloadFonts?: boolean,
   +preloadStyles?: boolean
 };
 
@@ -121,6 +122,7 @@ The default behaviour is to return the HTML.
 |`extractStyles`|`boolean`|Extracts CSS used to render the page.|`false`|
 |`formatStyles`|`(styles: string) => Promise<string>`|Used to format CSS. Useful with `inlineStyles=true` option to format the CSS before it is inlined.|N/A|
 |`inlineStyles`|`boolean`|Inlines the styles required to render the document.|`false`|
+|`preloadFonts`|`boolean`|Adds `rel=preload` for all fonts required to render the page.|`true`|
 |`preloadStyles`|`boolean`|Adds `rel=preload` for all styles removed from `<head>`. Used with `inlineStyles=true`.|`true`|
 |`url`|`string`|The URL to render.|N/A|
 
