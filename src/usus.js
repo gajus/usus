@@ -150,6 +150,14 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
     });
   }
 
+  const inlineStylesheetIndex = [];
+
+  CSS.styleSheetAdded(({header}) => {
+    if (header.isInline) {
+      inlineStylesheetIndex.push(header.styleSheetId);
+    }
+  });
+
   CSS.startRuleUsageTracking();
 
   Page.navigate({
@@ -164,6 +172,8 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
 
       await delay(configuration.delay);
 
+      debug('inline stylesheets', inlineStylesheetIndex);
+
       const rules = await CSS.takeCoverageDelta();
 
       const usedRules = rules.coverage
@@ -174,6 +184,13 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
       const slices = [];
 
       for (const usedRule of usedRules) {
+        if (inlineStylesheetIndex.includes(usedRule.styleSheetId)) {
+          debug('skipping inline stylesheet %d', usedRule.styleSheetId);
+
+          // eslint-disable-next-line no-continue
+          continue;
+        }
+
         const stylesheet = await CSS.getStyleSheetText({
           styleSheetId: usedRule.styleSheetId
         });
@@ -220,7 +237,10 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
       await inlineStylePreload(DOM, Runtime, rootDocument.root.nodeId, styleImportLinks);
     }
 
-    await inlineStyles(DOM, Runtime, rootDocument.root.nodeId, usedStyles);
+    if (usedStyles) {
+      await inlineStyles(DOM, Runtime, rootDocument.root.nodeId, usedStyles);
+    }
+
     await inlineImports(DOM, Runtime, rootDocument.root.nodeId, styleImportLinks);
 
     const rootOuterHTMLWithInlinedStyles = (await DOM.getOuterHTML({
@@ -234,6 +254,8 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
 
   if (configuration.extractStyles) {
     await chrome.kill();
+
+    // @todo Document that `extractStyles` does not return inline stylesheets.
 
     return usedStyles;
   }

@@ -145,6 +145,46 @@ test('extracts CSS', async (t) => {
   t.true(result.replace(/\s/g, '') === 'body{background:#f00;}');
 });
 
+test('does not re-inline the inline CSS', async (t) => {
+  const server = await serve(`
+    <html>
+      <head>
+        <style>
+        body {
+          background: #f00;
+        }
+        </style>
+      </head>
+      <body>
+        <p>Hello, World!</p>
+      </body>
+    </html>
+  `);
+
+  const result = await render(server.url, {
+    delay: 500,
+    inlineStyles: true,
+    preloadStyles: false
+  });
+
+  await server.close();
+
+  t.true(isHtmlEqual(result, `
+    <html>
+      <head>
+        <style>
+        body {
+          background: #f00;
+        }
+        </style>
+      </head>
+      <body>
+        <p>Hello, World!</p>
+      </body>
+    </html>
+  `));
+});
+
 test('extracts only the used CSS', async (t) => {
   const styleServer = await serve(`
     body {
