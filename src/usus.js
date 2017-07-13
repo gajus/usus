@@ -154,7 +154,7 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
   if (configuration.inlineStyles) {
     const styleImportNodeIds = (await DOM.querySelectorAll({
       nodeId: rootDocument.root.nodeId,
-      selector: 'head link[href*=".css"]'
+      selector: 'head link[rel="stylesheet"]'
     })).nodeIds;
 
     debug('found %d style imports contained in the <head> element', styleImportNodeIds.length);
