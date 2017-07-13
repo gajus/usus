@@ -179,8 +179,6 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
     await inlineStyles(DOM, Runtime, rootDocument.root.nodeId, usedStyles);
     await inlineImports(DOM, Runtime, rootDocument.root.nodeId, styleImportLinks);
 
-    // @todo Render <noscript> CSS import
-
     const rootOuterHTMLWithInlinedStyles = (await DOM.getOuterHTML({
       nodeId: rootDocument.root.nodeId
     })).outerHTML;
