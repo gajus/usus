@@ -10,6 +10,10 @@ export const command = 'render';
 export const desc = 'Renders page using Chrome Debugging Protocol. Extracts CSS used to render the page. Renders HTML with the blocking CSS made asynchronous. Inlines the critical CSS.';
 
 export const baseConfiguration = {
+  chromePort: {
+    description: 'Port of an existing Chrome instance. See "Controlling the Chrome instance" in the ūsus cookbook.',
+    type: 'number'
+  },
   cookies: {
     description: 'Sets a cookie with the given cookie data. Must be provided as key=value pairs, e.g. foo=bar.',
     type: 'array'

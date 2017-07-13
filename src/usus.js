@@ -16,7 +16,7 @@ import type {
 
 const debug = createDebug('usus');
 
-const launchChrome = () => {
+export const launchChrome = () => {
   return launch({
     chromeFlags: [
       '--disable-gpu',
@@ -120,11 +120,31 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
 
   debug('rendering URL %s', JSON.stringify(configuration));
 
-  const chrome = await launchChrome();
+  let chrome;
+  let chromePort;
+
+  if (configuration.chromePort) {
+    debug('attempting to use the user provided instance of Chrome (port %d)', configuration.chromePort);
+
+    chromePort = configuration.chromePort;
+  } else {
+    chrome = await launchChrome();
+    chromePort = chrome.port;
+  }
 
   const protocol = await CDP({
-    port: chrome.port
+    port: chromePort
   });
+
+  const end = async (): Promise<void> => {
+    await protocol.close();
+
+    if (!chrome) {
+      return;
+    }
+
+    await chrome.kill();
+  };
 
   const {
     CSS,
@@ -170,7 +190,7 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
     }
   });
 
-  CSS.startRuleUsageTracking();
+  await CSS.startRuleUsageTracking();
 
   const frame = await Page.navigate({
     url
@@ -224,6 +244,8 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
     });
   });
 
+  await CSS.stopRuleUsageTracking();
+
   if (configuration.formatStyles) {
     usedStyles = await configuration.formatStyles(usedStyles);
   }
@@ -269,15 +291,16 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
       nodeId: rootDocument.root.nodeId
     })).outerHTML;
 
-    await chrome.kill();
+    await end();
 
     return rootOuterHTMLWithInlinedStyles;
   }
 
   if (configuration.extractStyles) {
-    await chrome.kill();
+    await end();
 
-    // @todo Document that `extractStyles` does not return inline stylesheets.
+    // @todo Document that `extractStyles` does not return the inline stylesheets.
+    // @todo Document that `extractStyles` does not return the alien stylesheets.
 
     return usedStyles;
   }
@@ -286,7 +309,7 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
     nodeId: rootDocument.root.nodeId
   })).outerHTML;
 
-  await chrome.kill();
+  await end();
 
   return rootOuterHTML;
 };

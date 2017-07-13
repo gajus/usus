@@ -16,6 +16,7 @@ export const deviceMetricsOverrideDesktopProfile = {
 };
 
 export default (userConfiguration: UserConfigurationType): ConfigurationType => {
+  const chromePort = userConfiguration.chromePort;
   const cookies = userConfiguration.cookies || [];
   const delayConfiguration = userConfiguration.delay || 5000;
   const extractStyles = userConfiguration.extractStyles || false;
@@ -37,6 +38,7 @@ export default (userConfiguration: UserConfigurationType): ConfigurationType => 
   }
 
   return {
+    chromePort,
     cookies,
     delay: delayConfiguration,
     deviceMetricsOverride,

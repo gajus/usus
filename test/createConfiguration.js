@@ -7,6 +7,7 @@ import createConfiguration, {
 
 const createDefaultConfiguration = () => {
   return {
+    chromePort: undefined,
     cookies: [],
     delay: 5000,
     deviceMetricsOverride: {

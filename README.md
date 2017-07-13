@@ -95,6 +95,7 @@ export type UserDeviceMetricsOverrideType = {
 type FormatStylesType = (styles: string) => Promise<string>;
 
 export type UserConfigurationType = {
+  +chromePort?: number,
   +cookies?: $ReadOnlyArray<CookieType>,
   +delay?: number,
   +deviceMetricsOverride?: UserDeviceMetricsOverrideType,
@@ -113,6 +114,7 @@ The default behaviour is to return the HTML.
 
 |Name|Type|Description|Default value|
 |---|---|---|---|
+|`chromePort`|`number`|Port of an existing Chrome instance. See [Controlling the Chrome instance](#controlling-the-chrome-instance).|N/A|
 |`cookies`|`Array<{name: string, value: string}>`|Sets a cookie with the given cookie data.|N/A|
 |`delay`|`number`|Defines how many milliseconds to wait after the "load" event has been fired before capturing the styles used to load the page. This is important if resources appearing on the page are being loaded asynchronously.|`number`|`5000`|
 |`deviceMetricsOverride`||See [`deviceMetricsOverride` configuration](#devicemetricsoverride-configuration)||
@@ -173,9 +175,38 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
   && sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
   && apt-get update -y \
   && apt-get install google-chrome-stable -y
+
 ```
 
 This assumes that you are extending from the base [`node` image](https://github.com/nodejs/docker-node).
+
+### Controlling the Chrome instance
+
+By default, ūsus creates a new instance of Chrome for every `render` operation and destroys it after completion. However, you can start Chrome independent of ūsus and re-use the same instance for multiple renderings.
+
+```js
+import {
+  launchChrome,
+  render
+} from 'usus';
+
+const chrome = await launchChrome();
+
+await render('https://go2cinema.com/movies/baywatch-2017-1198354', {
+  chromePort: chrome.port,
+  inlineStyles: true
+});
+
+await render('https://go2cinema.com/movies/baby-driver-2017-2257838', {
+  chromePort: chrome.port,
+  inlineStyles: true
+});
+
+await chrome.kill();
+
+```
+
+`launchChrome` is a convenience method to launch Chrome using default ūsus configuration. If you need granular control over how Chrome is launched, refer to the [chrome-launcher](https://github.com/GoogleChrome/lighthouse/tree/master/chrome-launcher) program.
 
 ### Minifying the CSS
 
@@ -191,7 +222,7 @@ import {
   minify
 } from 'csso';
 
-return render(url, {
+await render(url, {
   formatStyles: (styles: string): Promise<string> => {
     return minify(styles).css;
   },

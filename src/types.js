@@ -28,6 +28,7 @@ export type DeviceMetricsOverrideType = {
 type FormatStylesType = (styles: string) => Promise<string>;
 
 export type UserConfigurationType = {
+  +chromePort?: number,
   +cookies?: $ReadOnlyArray<CookieType>,
   +delay?: number,
   +deviceMetricsOverride?: UserDeviceMetricsOverrideType,
@@ -38,6 +39,7 @@ export type UserConfigurationType = {
 };
 
 export type ConfigurationType = {|
+  +chromePort?: number,
   +cookies: $ReadOnlyArray<CookieType>,
   +delay: number,
   +deviceMetricsOverride: DeviceMetricsOverrideType,

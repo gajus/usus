@@ -1,13 +1,31 @@
 // @flow
 
-import test from 'ava';
+import test, {
+  after,
+  before
+} from 'ava';
 import {
+  launchChrome,
   render
 } from '../src/usus';
 import {
   isHtmlEqual,
   serve
 } from './helpers';
+
+let chromeInstance;
+let chromePort;
+
+before(async () => {
+  const chrome = await launchChrome();
+
+  chromeInstance = chrome;
+  chromePort = chrome.port;
+});
+
+after.always(async () => {
+  await chromeInstance.kill();
+});
 
 test('renders HTML', async (t) => {
   const server = await serve(`
@@ -19,6 +37,7 @@ test('renders HTML', async (t) => {
   `);
 
   const result = await render(server.url, {
+    chromePort,
     delay: 500
   });
 
@@ -53,6 +72,7 @@ test('inlines CSS (preloadStyles=false)', async (t) => {
   `);
 
   const result = await render(server.url, {
+    chromePort,
     delay: 500,
     inlineStyles: true,
     preloadStyles: false
@@ -94,6 +114,7 @@ test('inlines CSS (preloadStyles=true)', async (t) => {
   `);
 
   const result = await render(server.url, {
+    chromePort,
     delay: 500,
     inlineStyles: true
   });
@@ -135,6 +156,7 @@ test('extracts CSS', async (t) => {
   `);
 
   const result = await render(server.url, {
+    chromePort,
     delay: 500,
     extractStyles: true
   });
@@ -162,6 +184,7 @@ test('does not re-inline the inline CSS', async (t) => {
   `);
 
   const result = await render(server.url, {
+    chromePort,
     delay: 500,
     inlineStyles: true,
     preloadStyles: false
@@ -202,6 +225,7 @@ test('does not inline CSS from alien frames', async (t) => {
   `);
 
   const result = await render(server.url, {
+    chromePort,
     delay: 2000,
     inlineStyles: true,
     preloadStyles: false
@@ -247,6 +271,7 @@ test('extracts only the used CSS', async (t) => {
   `);
 
   const result = await render(server.url, {
+    chromePort,
     delay: 500,
     extractStyles: true
   });
