@@ -185,6 +185,46 @@ test('does not re-inline the inline CSS', async (t) => {
   `));
 });
 
+test('does not inline CSS from alien frames', async (t) => {
+  const server = await serve(`
+    <html>
+      <head>
+        <style>
+        body {
+          background: #f00;
+        }
+        </style>
+      </head>
+      <body>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/HEew7zvpAWE" frameborder="0" allowfullscreen></iframe>
+      </body>
+    </html>
+  `);
+
+  const result = await render(server.url, {
+    delay: 2000,
+    inlineStyles: true,
+    preloadStyles: false
+  });
+
+  await server.close();
+
+  t.true(isHtmlEqual(result, `
+    <html>
+      <head>
+        <style>
+        body {
+          background: #f00;
+        }
+        </style>
+      </head>
+      <body>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/HEew7zvpAWE" frameborder="0" allowfullscreen></iframe>
+      </body>
+    </html>
+  `));
+});
+
 test('extracts only the used CSS', async (t) => {
   const styleServer = await serve(`
     body {

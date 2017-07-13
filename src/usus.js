@@ -151,8 +151,20 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
   }
 
   const inlineStylesheetIndex = [];
+  const alienFrameStylesheetIndex = [];
 
   CSS.styleSheetAdded(({header}) => {
+    // eslint-disable-next-line no-use-before-define
+    const mainFrameId = frameId;
+
+    if (!mainFrameId) {
+      throw new Error('Stylesheet has been added before frameId has been established.');
+    }
+
+    if (header.frameId !== mainFrameId) {
+      alienFrameStylesheetIndex.push(header.styleSheetId);
+    }
+
     if (header.isInline) {
       inlineStylesheetIndex.push(header.styleSheetId);
     }
@@ -160,9 +172,11 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
 
   CSS.startRuleUsageTracking();
 
-  Page.navigate({
+  const frame = await Page.navigate({
     url
   });
+
+  const frameId = frame.frameId;
 
   let usedStyles;
 
@@ -172,6 +186,7 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
 
       await delay(configuration.delay);
 
+      debug('alien stylesheets', inlineStylesheetIndex);
       debug('inline stylesheets', inlineStylesheetIndex);
 
       const rules = await CSS.takeCoverageDelta();
@@ -184,6 +199,13 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
       const slices = [];
 
       for (const usedRule of usedRules) {
+        if (alienFrameStylesheetIndex.includes(usedRule.styleSheetId)) {
+          debug('skipping alien stylesheet %d', usedRule.styleSheetId);
+
+          // eslint-disable-next-line no-continue
+          continue;
+        }
+
         if (inlineStylesheetIndex.includes(usedRule.styleSheetId)) {
           debug('skipping inline stylesheet %d', usedRule.styleSheetId);
 
