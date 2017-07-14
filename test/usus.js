@@ -95,7 +95,9 @@ test('inlines CSS (preloadStyles=false)', async (t) => {
   ));
 });
 
-test('inlines CSS (preloadFonts=true)', async (t) => {
+// @todo The outcome of this test varies depending on the region where the test is executed.
+// Reformat using a font repository other than Google fonts.
+test.skip('inlines CSS (preloadFonts=true)', async (t) => {
   const server = await serve(`
     <html>
       <head>
