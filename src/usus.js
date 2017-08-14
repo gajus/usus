@@ -18,12 +18,12 @@ import type {
 
 const debug = createDebug('usus');
 
-export const launchChrome = () => {
+export const launchChrome = (flags: string[] = [
+  '--disable-gpu',
+  '--headless'
+]) => {
   return launch({
-    chromeFlags: [
-      '--disable-gpu',
-      '--headless'
-    ]
+    chromeFlags: flags
   });
 };
 
