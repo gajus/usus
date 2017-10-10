@@ -204,6 +204,7 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
     });
   }
 
+  const addedStyleSheets = [];
   const inlineStylesheetIndex = [];
   const alienFrameStylesheetIndex = [];
 
@@ -222,6 +223,8 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
     if (header.isInline) {
       inlineStylesheetIndex.push(header.styleSheetId);
     }
+
+    addedStyleSheets[header.styleSheetId] = header;
   });
 
   await CSS.startRuleUsageTracking();
@@ -299,9 +302,23 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
           styleSheetId: usedRule.styleSheetId
         });
 
-        slices.push(stylesheet.text.slice(usedRule.startOffset, usedRule.endOffset));
-      }
+        let rule = stylesheet.text.slice(usedRule.startOffset, usedRule.endOffset);
+        const cssFileUrl = addedStyleSheets[usedRule.styleSheetId].sourceURL;
+        const styleRuleUrl =
+            rule.match(/[:,\s]\s*url\s*\(\s*(?:'(\S*?)'|"(\S*?)"|((?:\\\s|\\\)|\\\"|\\\'|\S)*?))\s*\)/);
 
+        if (styleRuleUrl && cssFileUrl) {
+          const gr3 = styleRuleUrl[3];
+
+          if (gr3) {
+            const replace = URL.resolve(cssFileUrl, gr3);
+
+            rule = rule.replace(gr3, replace);
+          }
+        }
+
+        slices.push(rule);
+      }
       resolve(slices.join(''));
     });
   });
