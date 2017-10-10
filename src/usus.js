@@ -311,9 +311,9 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
           const gr3 = styleRuleUrl[3];
 
           if (gr3) {
-            const replace = URL.resolve(cssFileUrl, gr3);
+            const replace = URL.parse(URL.resolve(cssFileUrl, gr3));
 
-            rule = rule.replace(gr3, replace);
+            rule = rule.replace(gr3, replace.pathname);
           }
         }
 

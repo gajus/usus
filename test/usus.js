@@ -328,3 +328,33 @@ test('extracts only the used CSS', async (t) => {
 
   t.true(result.replace(/\s/g, '') === 'body{background:#f00;}');
 });
+
+test('rewrites relative paths in css', async (t) => {
+  const styleServer = await serve(`
+    body {
+      background-image: url(./images/image.jpg);
+    }
+  `, 'text/css');
+
+  const server = await serve(`
+    <html>
+      <head>
+        <link rel='stylesheet' href='${styleServer.url}'>
+      </head>
+      <body>
+        <p>Hello, World!</p>
+      </body>
+    </html>
+  `);
+
+  const result = await render(server.url, {
+    chromePort,
+    delay: 500,
+    extractStyles: true
+  });
+
+  await styleServer.close();
+  await server.close();
+
+  t.true(result.replace(/\s/g, '') === 'body{background-image:url(/images/image.jpg);}');
+});
