@@ -305,7 +305,7 @@ export const render = async (url: string, userConfiguration: UserConfigurationTy
         let rule = stylesheet.text.slice(usedRule.startOffset, usedRule.endOffset);
         const cssFileUrl = addedStyleSheets[usedRule.styleSheetId].sourceURL;
         const styleRuleUrl =
-            rule.match(/[:,\s]\s*url\s*\(\s*(?:'(\S*?)'|"(\S*?)"|((?:\\\s|\\\)|\\\"|\\\'|\S)*?))\s*\)/);
+            rule.match(/[:,\s]\s*url\s*\(\s*(?:'(\S*?)'|"(\S*?)"|((?:\\\s|\\\)|\\"|\\'|\S)*?))\s*\)/);
 
         if (styleRuleUrl && cssFileUrl) {
           const gr3 = styleRuleUrl[3];
