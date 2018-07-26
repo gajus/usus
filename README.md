@@ -8,6 +8,14 @@
 
 Webpage pre-rendering service. ⚡️
 
+## Deprecated
+
+Deprecated in favour of https://github.com/GoogleChrome/rendertron
+
+The two projects are not functionally interchangeable. However, the overlap is significant enough to discourage the duplication of effort.
+
+Future releases of ūsus will be limited to bug fixes.
+
 ## Features
 
 * Renders webpage using the [Chrome Debugging Protocol](https://chromedevtools.github.io/devtools-protocol/) (CDP).
