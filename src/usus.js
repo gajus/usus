@@ -18,13 +18,13 @@ import type {
 
 const debug = createDebug('usus');
 
-export const launchChrome = () => {
-  return launch({
-    chromeFlags: [
-      '--disable-gpu',
-      '--headless'
-    ]
-  });
+export const launchChrome = (options: {chromeFlags: string[]} = {
+  chromeFlags: [
+    '--disable-gpu',
+    '--headless'
+  ]
+}) => {
+  return launch(options);
 };
 
 const inlineStyles = async (DOM: *, Runtime: *, rootNodeId: number, styles: string) => {
